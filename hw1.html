@@ -1,0 +1,283 @@
+(* Homework Assignment 1
+   Programming Languages
+   CS471, Spring 2016
+   Binghamton University *)
+
+(* <h1>Instructions</h1> *)
+
+(* This section deals with general submission instructions.
+
+First, grab this assignment's <a href="hw1.asn">template source file</a>. To make things easier for everyone it will contain all questions with space to answer them inside the file. You must submit all answers in this file: Any external code that is required to complete a question should be included in this file as well. NOTE: You don't have to answer inside comments for this assignment. Just place an answer in the templated between questions.
+
+You must tar and gzip your submission, which should include this file along with any code required to complete the assignment. You should name the tarball with your bmail name: The following sequence of commands should be adequate to create and tar a directory of your work -- simply replace 'acanino1' with your bmail name.
+*)
+mkdir hw1
+cd hw1
+mv PATH_TO_ASN_FILE .
+tar -cvvf acanino1_hw1.tar *
+gzip acanino1_hw1.tar
+
+(* Please follow these instructions. If anything confuses you, please send me an email and I will clarify. *)
+
+(* <h1>Homework 1</h1> *)
+
+(* Due: Wednesday 2/3 at 11:59 PM *)
+
+(* <h3>Problem 1:</h3> 
+In class we discussed the five types of errors encountered: lexical, syntactical, static semantic, dynamic semantic, and logical. The following C program has several errors (all of which include a line comment). For each error, state which category it falls under with a short explanation. 
+
+As we discussed in class, the line between certain errors can be blurry; hence, the explanation you provide is more important than a specific "right" answer, but be brief, no more than a single sentence is required.
+*)
+
+#include <stdio.h>
+char a1; b1;        // Error #1
+int arr[10]         // Error #2
+long x = 123@;      // Error #3
+
+int chg(long fr) {
+  if (fr = 0) {     // Error #4
+    x = 10.99;      // Error #5
+    arr[10] = 10;   // Error #6
+  } else {
+    arr[1] = 1;
+  }
+}
+
+int main (void) {
+  char union = 'a'; // Error #7
+  float x;
+  union = chg(arr); // Error #8
+  return 0;
+} 
+
+(* <h4>Problem 1 Answer:</h4> 
+Error1: static semantic
+Error2: syntactical
+Error3: lexical
+Error4: logical
+Error5: syntactical
+Error6: dynamic semantic
+*)
+
+(* <h3>Problem 2:</h3> 
+Download and compile <a href="powI.c">powI.c</a> to assembly code on your machine: Use the command <code>gcc -S powI_sample.c</code>
+
+Although C is considered a high-level language it really is only a few steps up from assembly. You should be able to recognize a simple correspondence between the C code and the compiled assembly code. Annotate the generated assembly code (you may copy and paste it in this file and annotate by line): Look for the key points, there is no need to label each instruction.
+
+In particular, you should recognize and label the following:
+  1. The creation of the stack frame.
+  2. Argument storage and updates.
+  3. Local variable storage and updates.
+  4. Translation of the loop.
+  5. Some form of return result, and an exit from the function. *)
+
+(* <h4>Problem 2 Answer:</h4> 
+
+  .file "powI.c"
+  .text
+  .globl  powI
+  .type powI, @function
+powI:
+.LFB0:
+  .cfi_startproc
+  pushq %rbp  //1. stack frame
+  .cfi_def_cfa_offset 16
+  .cfi_offset 6, -16
+  movq  %rsp, %rbp  //1.  stack frame 
+  .cfi_def_cfa_register 6
+  movl  %edi, -20(%rbp)  //2.  argument storage
+  movl  %esi, -24(%rbp)  //2. argument storage
+  movl  $1, -4(%rbp)  //3.  acc & p are assigned 1,0 respectively
+  movl  $0, -8(%rbp)  
+  jmp .L2
+.L3:
+  movl  -4(%rbp), %eax  //4.  code executed inside loop
+  imull -24(%rbp), %eax
+  movl  %eax, -4(%rbp)
+  addl  $1, -8(%rbp)  //4.  p is incremented (p++)
+.L2:
+  movl  -8(%rbp), %eax  //4.
+  cmpl  -20(%rbp), %eax //4.  comparison for loop re-execution
+  jl  .L3
+  movl  -4(%rbp), %eax  //5. puts result in return register
+  popq  %rbp   //5.  stack frame/return register
+  .cfi_def_cfa 7, 8
+  ret  //return call/exit function
+  .cfi_endproc
+.LFE0:
+  .size powI, .-powI
+  .ident  "GCC: (Debian 4.7.2-5) 4.7.2"
+  .section  .note.GNU-stack,"",@progbits
+
+
+
+*)
+
+(* <h3>Problem 3:</h3> 
+Download and compile <a href="pow_full.c">pow_full.c</a>: Use the command <code>gcc -Wall pow_full.c -o pow </code> (it's always a good idea to compile with -Wall). You may run it with any integer input <code>./pow 2</code> .
+
+The function <b>powI</b> is obviously an iterative implementation of an integer power function. 
+  1. Add a new function, <b>powF</b>, that implements integer power using a <i>functional style</i>: You should recursively call <b>powF</b> and use no loops. Adjust the main function to call <b>powF</b> instead.
+  2. Briefly discuss the computation complexity of both implementations of power (big-oh notation); one sentence will do.
+  3. In a language where you have the flexibility to implement an algorithm iteratively and recursively why would you choose one over the other? 
+*)
+
+(* <h4>Problem 3 Answer:</h4>
+
+
+  /*
+    1.  I did it.
+    2.  both are O(n)
+    3.  The recursive function will use more memory, particularly for larger powers, however it is more readable and (although not appliccable to the case of my powF function) is a better tool for working with trees and graphs.
+  */
+
+  #include <stdio.h>
+  #include <stdlib.h>
+
+  int powI(int pow, int base) {
+    int acc, p;
+    for (acc=1,p=0; p < pow; p++) {
+      acc = acc * base;
+    }
+    return acc;
+  } 
+
+  int powF(int pow, int base) {
+    if(pow == 0)
+      return 1;
+    else
+      return base * powF(pow-1, base);
+  } 
+
+  int main(int argc, char **argv) {
+    if (argc < 3) {
+      printf("%s usage: [BASE] [POWER]\n", argv[0]);
+      return 1;
+    }
+    int base = atoi(argv[1]);
+    int pow = atoi(argv[2]);
+    int r = powF(pow,base);
+    printf("%d\n", r);
+    return 0;
+  }
+
+
+ *)
+
+(* <h3>Problem 4:</h3> 
+Statically typed languages have their advantages, but sometimes it really is simpler to use a dynamic language. 
+
+The following is a simple implementation of factorial in Python: <a href="fact.py">fact.py</a> *)
+#! /usr/bin/env python
+
+import sys
+
+def fact(n):
+  if n == 0:
+    return 1
+  else:
+    return n * fact(n-1)
+
+if len(sys.argv) != 2:
+  print("%s usage: [NUMBER]" % sys.argv[0])
+  exit()
+
+print(fact(int(sys.argv[1])))
+
+(* The following is a simple implementation of factorial in Ruby: <a href="fact.rb">fact.rb</a> *)
+#! /usr/bin/env ruby
+
+def fact(n)
+  return 1 if n == 0
+  return n * fact(n-1)
+end
+
+if ARGV.length != 1 
+  puts "fact.rb usage: [NUMBER]" 
+  exit
+end
+
+puts fact(ARGV[0].to_i)
+
+(* Rewrite <b>powI</b> and <b>powF</b> from pow_full.c in Python and Ruby (they will syntactically and semantically be very similar). 
+
+In particular:
+(1) Create a file named pow_full.py that contains an implementation of powI and powF in Python.
+(2) Create a file named pow_full.rb that contains an implementation of powI and powF in Ruby.
+
+Make sure to place the code in this file as well. *)
+
+(* <h4>Problem 4 Answer:</h4> *)
+
+(* <h3>Problem 5:</h3> 
+In your local implementation of C, what is the limit on the size of integers? (You can use /usr/include/limits.h to figure out the range of values of type int.)  What happens in the event of arithmetic overflow? What are the implications of size limits on the portability of programs from one machine/compiler to another? How do the answers to these questions differ for Java? for Python? for Haskell? *)
+
+(* <h4>Problem 5 Answer:</h4> *)
+
+(* <h3>Problem 6:</h3> 
+In class we discussed how the <i>traditional</i> definition of a compiler is rarely used in practice anymore -- some exceptions obviously still apply; in reality, many languages use a combination of compilation and interpretation techniques.
+
+Pick a language that <b>is not</b> on the following list (i.e, pick a modern language that we have not discussed), and discuss its compilation process. Part of the point of this question is for you to explore how some languages you are not familiar with work, so spend a little time doing some research.
+- C
+- C++
+- Java
+- Ruby
+- Python
+- Go
+- Fortran
+- Pascal
+*)
+
+
+(* <h4>Problem 6 Answer:</h4> *)
+
+(* <h3>Problem 7:</h3> 
+Operator precedence and associativity are often subtle details that are overlooked when using a language (and require careful treatment when implementing a compiler). One way around this issue is to use prefix or postfix notation. This is not as foreign as you think, every function call is in prefix notation: 2 powI 3 is just as valid as + 2 3.
+
+Rewrite the expressions (a-d) below in prefix notation according to the precedence and associativity rules given:
+<table style="width:25%">
+<tr><td>Binary Op</td><td>Precedence</td><td>Associativity</td></tr>
+<tr><td>*</td><td>3</td><td>Left</td></tr>
+<tr><td>/</td><td>3</td><td>Left</td></tr>
+<tr><td>+</td><td>2</td><td>Left</td></tr>
+<tr><td>-</td><td>2</td><td>Left</td></tr>
+<tr><td>@</td><td>1</td><td>Right</td></tr>
+</table>
+
+The algorithm for rewriting is very straightforward:
+(1) Paranthesis each expression using the rules for precedence and associativity.
+(2) For each paranthesized expression, move the operator to the left of the operands for prefix notation (right of the operands for postfix).
+(3) Remove the parantheses.
+
+The operands will have the same order in the resulting expressions (due to the restriction that the operators are NOT commulatative).
+
+The expressions:
+(a) z + w @ x @ y
+(b) w + (x + y * z)
+(c) w * x * y ^ z
+(d) w / x * y / z *)
+
+(* <h4>Problem 7 Answer:</h4> *)
+
+(* <h3>Problem 8:</h3> 
+Repeat Problem 7, but use <b>postfix</b> notation instead. *)
+
+(* <h4>Problem 8 Answer:</h4> *)
+
+(* <h3>Problem 9:</h3> 
+Ackermann's function plays an important role in the theory of recursive functions and in the study of complexity of certain algorithms involving set unions. In the early days of imperative languages, Ackermann's function was used to measure the recursion capability of a compiler. 
+
+<code>
+ack(m,n) =    n + 1                   if m = 0
+ack(m,n) =    ack(m-1,1)              if n = 0 and m > 0
+ack(m,n) =    ack(m-1,ack(m, n-1))    if n > 0 and m > 0
+</code>
+
+Using the Ackermann definition given implement a function <b>ack</b> in C, Python, and Ruby. 
+
+In particular:
+(1) Create a file named ack.c and implement <b>ack</b> in C. Try and find the largest Ackermann number for your program.
+(2) Create a file named ack.py and implement <b>ack</b> in Python. Try and find the largest Ackermann number for your program.
+(3) Create a file named ack.rb and implement <b>ack</b> in Ruby. Try and find the largest Ackermann number for your program. *)
+
+(* <h4>Problem 9 Answer:</h4> *)
