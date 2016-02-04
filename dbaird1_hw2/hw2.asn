@@ -1,0 +1,164 @@
+(* Homework Assignment 2
+   Programming Languages
+   CS471, Spring 2016
+   Binghamton University *)
+
+(* <h1>Instructions</h1> *)
+
+(* This section deals with general submission instructions.
+
+Grab this assignment's <a href="hw2.asn">template source file</a>. To make things easier for everyone it will contain all questions with space to answer them inside the file. The code for this assignment is significantly longer than the last one, as such you DO NOT need to paste the entire contents in this file (noted at the specific questions below).
+
+You must tar and gzip your submission, which should include this file along with any code required to complete the assignment. You should name the tarball with your bmail name: The following sequence of commands should be adequate to create and tar a directory of your work -- simply replace 'acanino1' with your bmail name.
+*)
+mkdir hw2
+cd hw2
+mv PATH_TO_ASN_FILE .
+tar -cvvf acanino1_hw2.tar *
+gzip acanino1_hw2.tar
+
+(* Please follow these instructions. If anything confuses you, please send me an email and I will clarify. *)
+
+(* <h1>Homework 2</h1> *)
+
+(* <h3>Code</h3> 
+You'll need the following files to complete the assignment:
+<a href="Makefile">Makefile</a>
+<a href="arith1.c">arith1.c</a>
+<a href="arith2.c">arith2.c</a> *) 
+
+(* <h3>Problem 1:</h3> 
+Examine <code>arith1.c</code>: It contains an implementation of a simple arithmatic calculator. The following will compile and run a few test cases. *)
+make arith1
+./arith1
+1 + 2 * 3
+
+./arith1
+1 + 2 + 3
+
+(* The <code>arith1</code> language is parsed used a <b>recursive-descent</b> parser: It is fairly straightforward to determine the language's grammar from the parser. 
+
+In particular:
+(1) Using the code, give the complete grammar in BNF form 
+(2) Is the grammar left or right recursive? How does that affect the associativity of plus and mult? *)
+
+(* <h4>Problem 1 Answer:</h4> *)
+
+(* <h3>Problem 2:</h3> 
+Using the grammar you extracted in Problem 1 add two new operators to the <code>arith1</code> language. The first, minus, should have higher precedence than plus, but lower precedence than mult. The second, division, should have higher precedence than mult, but still be able to be overridden using parentheses as defined by the grammar. Both operators should have the same associativity as plus and minus.
+
+Give the modified grammar. *)
+
+(* <h4>Problem 2 Answer:</h4> *)
+
+(* <h3>Problem 3:</h3> 
+Write the left derivation for the following expressions according to the modified grammar from Problem 2 -- It may help to draw the parse tree first.
+
+a: 1 + 2 * 3
+b: 1 + 2 - 3
+c: 1 / 2 + 3 * 4 
+
+NOTE: You should show only one step at a time -- as we did in class -- but may jump from number to the actual terminal number.
+For example:
+number '+' expr
+'10' '+' expr *)
+
+(* <h4>Problem 3 Answer:</h4> *)
+
+(* <h3>Problem 4:</h3> 
+Modify <code>arith1.c</code> and add the new operators that you defined in Problem 2. Pay careful attention to the pattern between the original grammar and the associated function calls in <code>arith1.c</code>. If you have properly adjusted the grammar, it should be a straightforward modification of the original functions with the additional of a couple new functions for the new operators.
+
+You should pay careful attention to how expressions evaluate; a compile and a correct evaluation of some expressions does not mean you have modified everything correctly. Try the sample cases below. *)
+./arith
+1 + 2 - 2
+The result is: 1
+
+./arith
+1 + 2 - 3 * 5
+The result is: -12
+
+./arith
+4 / 3 - 2 / 1
+The result is: -1
+
+(* You DO NOT have to paste <code>arith1.c</code> in the template file, but you must submit the modified <code>arith1.c</code> file in the tarball that you will create for this assignment. *)
+
+(* <h4>Problem 4 Answer:</h4> *)
+
+(* <h3>Problem 5:</h3> 
+Examine <code>arith2.c</code>: It contains another implementation of a simple arithmetic calculator. The following will compile and run a few test cases. *)
+make arith2
+./arith2
+1 + 2 * 3
+
+./arith2
+1 + 2 + 3
+
+(* The <code>arith2</code> language is parsed using a slightly different technique, although it is still considered a <b>recursive-descent</b> parser. Pay careful attention to the way while loops are used to parse, instead of pure recursion. Thinking in terms of EBNF (hint: kleene star) may help determine the difference from the previous grammar.
+
+In particular:
+(1) Using the code, give the complete grammar in BNF or EBNF form 
+(2) Is the grammar left or right recursive? How does that affect the associativity of plus and mult? *)
+
+(* <h4>Problem 5 Answer:</h4> *)
+
+(* <h3>Problem 6:</h3> 
+Using the grammar you extracted in Problem 5 add two new operators to the <code>arith2</code> language. The first, minus, should have higher precedence than plus, but lower precedence than mult. The second, division, should have higher precedence than mult, but still be able to be overridden using parentheses as defined by the grammar. Both operators should have the same associativity as plus and minus.
+
+Give the modified grammar. *)
+
+(* <h4>Problem 6 Answer:</h4> *)
+
+(* <h3>Problem 7:</h3> 
+Write the left derivation for the following expressions according to the modified grammar from Problem 6 -- It may help to draw the parse tree first.
+
+a: 1 + 2 * 3
+b: 1 + 2 - 3
+c: 1 / 2 + 3 * 4
+
+NOTE: You should show only one step at a time -- as we did in class -- but may jump from number to the actual terminal number.
+For example:
+number '+' expr
+'10' '+' expr *) 
+
+(* <h4>Problem 7 Answer:</h4> *)
+
+(* <h3>Problem 8:</h3> 
+Modify <code>arith2.c</code> and add the new operators that you defined in Problem 6. Pay careful attention to the pattern between the original grammar and the associated function calls in <code>arith2.c</code>. If you have properly adjusted the grammar, it should be a straightforward modification of the original functions with the additional of a couple new functions for the new operators.
+
+You should pay careful attention to how expressions evaluate; a compile and a correct evaluation of some expressions does not mean you have modified everything correctly. Try the sample cases below. *)
+./arith
+1 + 2 - 2
+The result is: 1
+
+./arith
+1 + 2 - 3 * 5
+The result is: -12
+
+./arith
+4 / 3 - 2 / 1
+The result is: -1
+
+(* You DO NOT have to paste <code>arith2.c</code> in the template file, but you must submit the modified <code>arith2.c</code> file in the tarball that you will create for this assignment. *)
+
+(* <h4>Problem 8 Answer:</h4> *)
+
+(* <h3>Problem 9:</h3> 
+Write regular expressions to match the following -- You should test your solutions using <a href="http://rubular.com">rubular</a>.
+
+(1) C identifiers: A C identifier must start with an alpha character or an underscore, and may be followed by alphanumeric characters or the underscore.
+(2) Strings: A string must start and end with an double quote and may contain any character except the double quote itself; however, you may <i>escape</i> a double quote inside the string using \ -- i.e. "this is \" a string"
+(3) Strings over the alphabet {a,b} that contain an even number of b's. 
+(4) Strings over the alphabet {a,b,c} that contain an odd number of c's.
+
+Samples:
+The following are acceptable strings for (3): abb, bab, bbaaa, ababa; the following should be rejected for (3): abbb, babb, bbabbb.
+
+The following are acceptable string for (4): cabab, ccaaabc, ccc; the following should be rejected for (4): cababc, ccaaab, bbabcc. 
+
+NOTE: Rubular will feed the entire input at each character into the regex. If we have a regex <code>aa*</code> and give rubular the input "baa" it will match "aa". The entire string does not match however, which is correct and how you should view the regular expression. For example, if you were asked to write a regex that one or more a, and match "baa" on rubular then you have done something wrong.
+*)
+
+
+
+(* <h3>Problem 9 Answer: </h3> *)
