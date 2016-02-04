@@ -21,7 +21,7 @@ def powI(n, p)
 end
 
 if ARGV.length != 2
-  puts "fact.rb usage: [NUMBER] [POWER]" 
+  puts "fact.rb usage: [NUMBER] [POWER]"
   exit
 end
 

@@ -23,8 +23,8 @@ gzip acanino1_hw1.tar
 
 (* Due: Wednesday 2/3 at 11:59 PM *)
 
-(* <h3>Problem 1:</h3> 
-In class we discussed the five types of errors encountered: lexical, syntactical, static semantic, dynamic semantic, and logical. The following C program has several errors (all of which include a line comment). For each error, state which category it falls under with a short explanation. 
+(* <h3>Problem 1:</h3>
+In class we discussed the five types of errors encountered: lexical, syntactical, static semantic, dynamic semantic, and logical. The following C program has several errors (all of which include a line comment). For each error, state which category it falls under with a short explanation.
 
 As we discussed in class, the line between certain errors can be blurry; hence, the explanation you provide is more important than a specific "right" answer, but be brief, no more than a single sentence is required.
 *)
@@ -48,9 +48,9 @@ int main (void) {
   float x;
   union = chg(arr); // Error #8
   return 0;
-} 
+}
 
-(* <h4>Problem 1 Answer:</h4> 
+(* <h4>Problem 1 Answer:</h4>
 Error1: static semantic
 Error2: syntactical
 Error3: lexical
@@ -59,7 +59,7 @@ Error5: syntactical
 Error6: dynamic semantic
 *)
 
-(* <h3>Problem 2:</h3> 
+(* <h3>Problem 2:</h3>
 Download and compile <a href="powI.c">powI.c</a> to assembly code on your machine: Use the command <code>gcc -S powI_sample.c</code>
 
 Although C is considered a high-level language it really is only a few steps up from assembly. You should be able to recognize a simple correspondence between the C code and the compiled assembly code. Annotate the generated assembly code (you may copy and paste it in this file and annotate by line): Look for the key points, there is no need to label each instruction.
@@ -73,19 +73,19 @@ In particular, you should recognize and label the following:
 
 (* <h4>Problem 2 Answer:</h4> *)
 
-(* <h3>Problem 3:</h3> 
+(* <h3>Problem 3:</h3>
 Download and compile <a href="pow_full.c">pow_full.c</a>: Use the command <code>gcc -Wall pow_full.c -o pow </code> (it's always a good idea to compile with -Wall). You may run it with any integer input <code>./pow 2</code> .
 
-The function <b>powI</b> is obviously an iterative implementation of an integer power function. 
+The function <b>powI</b> is obviously an iterative implementation of an integer power function.
   1. Add a new function, <b>powF</b>, that implements integer power using a <i>functional style</i>: You should recursively call <b>powF</b> and use no loops. Adjust the main function to call <b>powF</b> instead.
   2. Briefly discuss the computation complexity of both implementations of power (big-oh notation); one sentence will do.
-  3. In a language where you have the flexibility to implement an algorithm iteratively and recursively why would you choose one over the other? 
+  3. In a language where you have the flexibility to implement an algorithm iteratively and recursively why would you choose one over the other?
 *)
 
 (* <h4>Problem 3 Answer:</h4> *)
 
-(* <h3>Problem 4:</h3> 
-Statically typed languages have their advantages, but sometimes it really is simpler to use a dynamic language. 
+(* <h3>Problem 4:</h3>
+Statically typed languages have their advantages, but sometimes it really is simpler to use a dynamic language.
 
 The following is a simple implementation of factorial in Python: <a href="fact.py">fact.py</a> *)
 #! /usr/bin/env python
@@ -112,14 +112,14 @@ def fact(n)
   return n * fact(n-1)
 end
 
-if ARGV.length != 1 
-  puts "fact.rb usage: [NUMBER]" 
+if ARGV.length != 1
+  puts "fact.rb usage: [NUMBER]"
   exit
 end
 
 puts fact(ARGV[0].to_i)
 
-(* Rewrite <b>powI</b> and <b>powF</b> from pow_full.c in Python and Ruby (they will syntactically and semantically be very similar). 
+(* Rewrite <b>powI</b> and <b>powF</b> from pow_full.c in Python and Ruby (they will syntactically and semantically be very similar).
 
 In particular:
 (1) Create a file named pow_full.py that contains an implementation of powI and powF in Python.
@@ -127,14 +127,88 @@ In particular:
 
 Make sure to place the code in this file as well. *)
 
-(* <h4>Problem 4 Answer:</h4> *)
+(* <h4>Problem 4 Answer:</h4>
+(*python*)
+#! /usr/bin/env python
 
-(* <h3>Problem 5:</h3> 
+import sys
+
+def powF(n, p):
+  if p == 0:
+    return 1
+  else:
+    return n * pow(n, p-1)
+
+def powI(n,p):
+  if p == 0:
+    return 1;
+  s = 1
+  while p > 0:
+    p-=1
+    s= s*n
+  return s
+if len(sys.argv) != 3:
+  print("%s usage: [NUMBER] [power]" % sys.argv[0])
+  exit()
+
+print(powF(int(sys.argv[1]), int(sys.argv[2])))
+print(powI(int(sys.argv[1]), int(sys.argv[2])))
+
+
+
+(*ruby*)
+#! /usr/bin/env ruby
+def powF(n, p)
+  if(p == 0)
+    return 1
+  end
+
+  return n * powF(n, p-1)
+end
+
+def powI(n, p)
+  if(p == 0)
+    return 1
+  end
+
+  s = 1
+  while p > 0 do
+    p = p-1
+    s=s*n
+  end
+  return s
+end
+
+if ARGV.length != 2
+  puts "fact.rb usage: [NUMBER] [POWER]"
+  exit
+end
+
+puts powF(ARGV[0].to_i, ARGV[1].to_i)
+puts powI(ARGV[0].to_i, ARGV[1].to_i)
+
+
+
+
+*)
+
+(* <h3>Problem 5:</h3>
 In your local implementation of C, what is the limit on the size of integers? (You can use /usr/include/limits.h to figure out the range of values of type int.)  What happens in the event of arithmetic overflow? What are the implications of size limits on the portability of programs from one machine/compiler to another? How do the answers to these questions differ for Java? for Python? for Haskell? *)
 
-(* <h4>Problem 5 Answer:</h4> *)
+(* <h4>Problem 5 Answer:</h4>
+maximums
+----------------------
+int:		2147483647
+unsigned int:	4294967295
 
-(* <h3>Problem 6:</h3> 
+if the maximum integer size is language, not platform dependent then the code is more portable
+because developers do not need to worry about the compiler and hardware of a different system
+enforcing a different max int than they predicted.  Languages which are interpreted or patially
+interpreted have this advantage as their max int is tied to their vm/interpritation/implimentation
+
+*)
+
+(* <h3>Problem 6:</h3>
 In class we discussed how the <i>traditional</i> definition of a compiler is rarely used in practice anymore -- some exceptions obviously still apply; in reality, many languages use a combination of compilation and interpretation techniques.
 
 Pick a language that <b>is not</b> on the following list (i.e, pick a modern language that we have not discussed), and discuss its compilation process. Part of the point of this question is for you to explore how some languages you are not familiar with work, so spend a little time doing some research.
@@ -149,9 +223,11 @@ Pick a language that <b>is not</b> on the following list (i.e, pick a modern lan
 *)
 
 
-(* <h4>Problem 6 Answer:</h4> *)
+(* <h4>Problem 6 Answer:</h4>
 
-(* <h3>Problem 7:</h3> 
+*)
+
+(* <h3>Problem 7:</h3>
 Operator precedence and associativity are often subtle details that are overlooked when using a language (and require careful treatment when implementing a compiler). One way around this issue is to use prefix or postfix notation. This is not as foreign as you think, every function call is in prefix notation: 2 powI 3 is just as valid as + 2 3.
 
 Rewrite the expressions (a-d) below in prefix notation according to the precedence and associativity rules given:
@@ -179,13 +255,13 @@ The expressions:
 
 (* <h4>Problem 7 Answer:</h4> *)
 
-(* <h3>Problem 8:</h3> 
+(* <h3>Problem 8:</h3>
 Repeat Problem 7, but use <b>postfix</b> notation instead. *)
 
 (* <h4>Problem 8 Answer:</h4> *)
 
-(* <h3>Problem 9:</h3> 
-Ackermann's function plays an important role in the theory of recursive functions and in the study of complexity of certain algorithms involving set unions. In the early days of imperative languages, Ackermann's function was used to measure the recursion capability of a compiler. 
+(* <h3>Problem 9:</h3>
+Ackermann's function plays an important role in the theory of recursive functions and in the study of complexity of certain algorithms involving set unions. In the early days of imperative languages, Ackermann's function was used to measure the recursion capability of a compiler.
 
 <code>
 ack(m,n) =    n + 1                   if m = 0
@@ -193,11 +269,69 @@ ack(m,n) =    ack(m-1,1)              if n = 0 and m > 0
 ack(m,n) =    ack(m-1,ack(m, n-1))    if n > 0 and m > 0
 </code>
 
-Using the Ackermann definition given implement a function <b>ack</b> in C, Python, and Ruby. 
+Using the Ackermann definition given implement a function <b>ack</b> in C, Python, and Ruby.
 
 In particular:
 (1) Create a file named ack.c and implement <b>ack</b> in C. Try and find the largest Ackermann number for your program.
 (2) Create a file named ack.py and implement <b>ack</b> in Python. Try and find the largest Ackermann number for your program.
 (3) Create a file named ack.rb and implement <b>ack</b> in Ruby. Try and find the largest Ackermann number for your program. *)
 
-(* <h4>Problem 9 Answer:</h4> *)
+(* <h4>Problem 9 Answer:</h4>
+
+(*C
+just kept running with no end in sight for any number of significance
+*)
+
+#include <stdio.h>
+#include <limits.h>
+
+int ack(int m,int n);
+
+int main()
+{
+  ack(3,1000);
+}
+
+int ack(int m, int n)
+{
+  if(m == 0)
+    return n+1;
+  if(n == 0 && m > 0)
+    return ack(m-1, 1);
+  if(n>0 && m > 0)
+    return ack(m-1,ack(m, n-1));
+ return 1;
+}
+
+
+(*Python
+# was about 490-500
+*)
+
+#! /usr/bin/env python
+
+import sys
+
+def ack(m,n):
+    print(n)
+    if(m == 0):
+        return n+1;
+    if(n == 0 and m > 0):
+        return ack(m-1, 1);
+    if(n>0 and m > 0):
+        return ack(m-1,ack(m, n-1));
+    return 1;
+
+
+
+if len(sys.argv) != 2:
+  print("%s usage: [NUMBER]" % sys.argv[0])
+  exit()
+
+ack(3,int(sys.argv[1]))
+
+
+(*Ruby*)
+
+
+ *)
