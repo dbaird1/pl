@@ -82,7 +82,45 @@ The function <b>powI</b> is obviously an iterative implementation of an integer 
   3. In a language where you have the flexibility to implement an algorithm iteratively and recursively why would you choose one over the other?
 *)
 
-(* <h4>Problem 3 Answer:</h4> *)
+(* <h4>Problem 3 Answer:</h4>
+#include <stdio.h>
+#include <stdlib.h>
+
+int powI(int pow, int base) {
+  int acc, p;
+  for (acc=1,p=0; p < pow; p++) {
+    acc = acc * base;
+  }
+  return acc;
+}
+
+int powF(int pow, int base) {
+  if(pow == 0)
+    return 1;
+  else
+    return base * powF(pow-1, base);
+}
+
+int main(int argc, char **argv) {
+  if (argc < 3) {
+    printf("%s usage: [BASE] [POWER]\n", argv[0]);
+    return 1;
+  }
+  int base = atoi(argv[1]);
+  int pow = atoi(argv[2]);
+  int r = powF(pow,base);
+  printf("%d\n", r);
+  return 0;
+}
+//2.  the big-o of each implementation os O(n)
+//3.  the choice between recursion and itteration largely depends on what language you're using and wheather
+// readability or efficiency is more important to you.  Some languages don't support recursion (although this
+//is almost unheard of in modern languages) while some functional languages have only recursion and make itteration
+//difficult or impossible.  Recursion often is considered more readable, however that can be subjective.
+//Ultimately recursion requires the stack to be manipulated and maintained while itteration relies on consistant
+//variables.  If this small difference will influence performance than it could be said the decision between the two
+//should be made off that.
+*)
 
 (* <h3>Problem 4:</h3>
 Statically typed languages have their advantages, but sometimes it really is simpler to use a dynamic language.
@@ -224,7 +262,20 @@ Pick a language that <b>is not</b> on the following list (i.e, pick a modern lan
 
 
 (* <h4>Problem 6 Answer:</h4>
+  Rust is a compiled language much like c++, it has many
+  of the same features and intricacies, however has a number of nuances which set it apart.
 
+  Rusts most distinguishing characteristic is it's memory safety
+
+  Rust has guarenteed memory safety while still allowing developers
+  to use a number of types of (smart) pointers.
+
+  The ability to account for memory safety without garbage
+  collection is huge, particularly in embeded systems
+  or other programs which require low downtime and
+  speedy/timely calculation.
+
+  Rust is still in its infancy but is gaining functionality and traction quickly.
 *)
 
 (* <h3>Problem 7:</h3>
