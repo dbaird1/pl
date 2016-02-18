@@ -176,6 +176,11 @@ NOTE: Don't worry about the error cases: i.e, N greater than the length of Y.  *
 
 /* <h3>Problem 5 Answer:</h3> */
 
+insert_at(X, Y, 1, [X|Y]).
+
+insert_at(X,[YY|Y],K,[YY|Z]):- K > 1, !,
+    Kn is K - 1, insert_at(X,Y,Kn,Z).
+
 /* <h3>Problem 5 Test:</h3> */
 %:- insert_at(3,[1,2,3],2,[1,2,3,3]).  % SUCCEED
 %:- insert_at(1,[1,2,3],0,[1,1,2,3]).  % SUCCEED
@@ -193,6 +198,11 @@ my_zip([1],[a],Z) should give Z = [1,a]
 NOTE: You may assume X and Y have the same length. */
 
 /* <h3>Problem 6 Answer:</h3> */
+
+my_zip(Xs, [], Xs).
+my_zip([], Ys, Ys) :- !.
+my_zip([X|Xs], [Y|Ys], [X,Y|Rs]) :-
+    !, my_zip(Xs, Ys, Rs).
 
 /* <h3>Problem 6 Test:</h3> */
 %:- my_zip([1,2,3],[a,b,c],[1,a,2,b,3,c]). % SUCCEED
@@ -220,6 +230,27 @@ You might find it helpful to define a helper predicate, repeated(X,Y,N) that suc
 
 /* <h3>Problem 7 Answer:</h3> */
 
+replicated([], []).
+connector([], R).
+builder(X, 0, P).
+builder(X, C, P).
+compare([], []).
+
+
+replicated(X,Y):-
+  =(R, []), connector(X, R), compare(R, Y).
+
+connector([X|Xs], R):-
+    =(Q, []), =(P, []), builder(X, X, P),  append(R, P, Q), append([],Q,R), connector(Xs, M).
+
+builder(X, C, P):-
+  C==0.
+builder(X, C, P):-
+  =(W, [X]), append(P, W ,F), =(P, []),=(K, []), append(K,F,X),write(X), V is C-1, C > 0, builder(X, C-1, P).
+
+compare([X|Xs], [Y|Ys]):-
+  X==Y, compare(Xs,Ys).
+
 /* <h3>Problem 7 Test:</h3> */
 %:- replicated([],[]).                 % SUCCEED
 %:- replicated([0],[]).                % SUCCEED
@@ -232,6 +263,14 @@ Write a predicate reverse_list(X,Y) that succeeds if Y is the list X reversed.
 You can and should use the built-in append/3. */
 
 /* <h3>Problem 8 Answer:</h3> */
+
+reverse_list(F, R) :-
+rev_help(F,N,[]), compare(N, R).
+
+rev_help([],N,N) :- !.
+rev_help([X|Xs],N,A) :- rev_help(Xs,N,[X|A]).
+
+
 
 /* <h3>Problem 8 Test:</h3> */
 %:- reverse_list([],[]).             % SUCCEED
@@ -246,6 +285,14 @@ For example...
 has_subseq([a,b,c,d],[b,d]) should succeed, but has_subseq([a,b,c,d],[b,e]) should fail. */
 
 /* <h3>Problem 9 Answer:</h3> */
+
+has_subseq([], []).
+
+has_subseq([_|A], B):-
+  has_subseq(A, B).
+
+has_subseq([X|A], [X|B]):-
+  has_subseq(A, B).
 
 /* <h3>Problem 9 Test:</h3> */
 %:- has_subseq([a,g,b,d],[g,b]).     % SUCCEED
