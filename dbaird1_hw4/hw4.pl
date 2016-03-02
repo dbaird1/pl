@@ -141,8 +141,10 @@ NOTE: You may use the builtins length/2 and append/3. The test queries may fail 
 
 /* <h3>Problem 4 Answer:</h3> */
 
-all_permutations(X,Y):-
-  findall(Z, permutation(Q,X,Z), Y).
+
+
+all_permutations(X, Y):-
+	length(X,L), findall(Z,all_permutations_of(L,X,Z),Y1), L1 is L-1,L1>=0, all_permutations_of(L1,X,Z1), append(Y1,Z1,Y).
 
 
 /* <h3>Problem 4 Test:</h3> */
@@ -168,6 +170,12 @@ outgoing(X,Y) should succeed if Y is a list of all immediate vertices reached fr
 
 /* <h3>Problem 5 Answer</h3> */
 
+outgoing(X,Y):-
+  findall(Z, edge(X,Z), Y).
+
+incoming(X,Y):-
+  findall(Z, edge(Z,X), Y).
+
 /* <h3>Problem 5 Test</h3> */
 %:- outgoing(a,X), X = [b,e,c].  %SUCCEED
 %:- outgoing(e,X), X = [].       %SUCCEED
@@ -185,12 +193,12 @@ Insert cuts into the following 3 predicates. The first two my_member1/2 and my_m
 
 /* <h3>Problem 6 Answer</h3> */
 my_member1(X,[X|_]).
-my_member1(X,[_|Ys]) :- my_member1(X,Ys).
+my_member1(X,[_|Ys]) :-my_member1(X,Ys), !.
 
-my_max(X,Y,Y) :- X =< Y.
-my_max(X,Y,X) :- X > Y.
+my_max(X,Y,Y) :- X =< Y, !.
+my_max(X,Y,X) :- X > Y, !.
 
-my_max1(X,Y,Z) :- X =< Y, Y = Z.
+my_max1(X,Y,Z) :- !, X =< Y, Y = Z.
 my_max1(X,_,X).
 
 /* <h3>Problem 7</h3>
@@ -203,7 +211,7 @@ Place a cut in the definition of my_prefix1 below so only following goal will on
 
 /* <h3>Problem 7 Answer </h3> */
 my_prefix1(_,[]).
-my_prefix1([X|Xs], [X|Ys]) :- my_prefix1(Xs,Ys).
+my_prefix1([X|Xs], [X|Ys]) :- my_prefix1(Xs,Ys), !.
 
 /* <h3>Problem 0B (NOT GRADED):</h3>
 The following are examples from class; they will not be graded as part of this assignment, but you will be expected to understand them before the test. You should be able to solve them yourself and I highly recommend answering them.
