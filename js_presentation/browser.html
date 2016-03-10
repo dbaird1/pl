@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div>
+    <div id = "picture" style = "position: relative;"></div>
+    <div id = "time" style = "position: relative;"></div>
+    <button onclick="helloWorldAppender()">Hello?</button>
+  </div>
+  <div id = "hworld" style = "position: relative;"></div>
+
+  <!-- Don't do this, include javascript files from other files -->
+  <!-- type="text/javascript" is only required for browsers which do not support html5 -->
+  <script type="text/javascript">
+    var hworldString = "";
+    //don't do this, use Jquerey, Angular.js, etc
+    document.getElementById("picture").innerHTML = " <img src=\"http://www.w3devcampus.com/wp-content/uploads/logoAndOther/logo_JavaScript.png\" alt=\"Smiley face\" height=\"42\" width=\"42\"> ";
+    function helloWorldAppender()
+    {
+        hworldString+= "<BR>Hello World!</BR>"
+        document.getElementById("hworld").innerHTML = hworldString;
+    }
+    //also do not use setInterval
+    setInterval(function(){
+        var date = new Date(Date.now());
+        var dateString = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        document.getElementById("time").innerHTML = dateString;
+     }, 1000);
+  </script>
+</body>
+</html>

@@ -98,10 +98,8 @@ For example, the following shows a right rotation at the root.
 
 /* <h3>Problem 3 Answer:</h3> */
 
-right_rotate(node(Q, P, Rgt), R) :-
-  get_children(P, Pl, Pr), node(Q, Pr, Rgt), node(R, Pl, Q).
+right_rotate(node(node(Q,Ql,Qr), node(P,Pl,Pr), Rgt), node(P,Pl,node(Q,Pr,Rgt))).
 
-get_children(node(Z,Lo,Ro), Lo, Ro).
 
 /* <h3>Problem 3 Test:</h3> */
 %:- right_rotate(node(5,node(3,node(2,nil,nil),node(4,nil,nil)),node(7,nil,nil)),X), X = node(3, node(2, nil, nil), node(5, node(4, nil, nil), node(7, nil, nil))). %SUCCEED
