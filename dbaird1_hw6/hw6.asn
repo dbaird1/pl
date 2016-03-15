@@ -1,0 +1,192 @@
+(* Homework Assignment 6
+   Programming Languages
+   CS471, Spring 2016
+   Binghamton University
+   Group Members: *)
+
+(* <h1>Instructions</h1> *)
+
+(* This section deals with general submission instructions.
+NEW: You are allowed to work in groups for this assignment. If you are working in a group, you MUST indicate your group members in the assignment header --- there has been a 'Group Members:' section added --- otherwise leave it blank. In additional, each group member must submit the assignment --- this is done for record keeping purposes and to ease grading. You will all receive the same grade.
+
+
+First, grab this assignment's <a href="hw6.asn">template source file</a>. To make things easier for everyone it will contain all questions with space to answer them inside the file. You must submit all answers in this file: Any external code that is required to complete a question should be included in this file as well. NOTE: You don't have to answer inside comments for this assignment. Just place an answer in the templated between questions.
+
+You must tar and gzip your submission, which should include this file along with any code required to complete the assignment. You should name the tarball with your bmail name: The following sequence of commands should be adequate to create and tar a directory of your work -- simply replace 'acanino1' with your bmail name.
+*)
+mkdir hw6
+cd hw6
+mv PATH_TO_ASN_FILE .
+tar -cvvf acanino1_hw6.tar *
+gzip acanino1_hw6.tar
+
+(* Please follow these instructions. If anything confuses you, please send me an email and I will clarify. *)
+
+(* <h1>Homework 6</h1> *)
+
+(* Due: Tuesday 3/15 at 11:59 PM *)
+
+(* <h3>Problem 1:</h3>
+Page 163 Exercise 3.1.  *)
+
+(* <h4>Problem 1 Answer:</h4> *)
+
+(* <h3>Problem 2:</h3>
+Download and compile <a href="powerR_sample.c">powerR_sample.c</a> to assembly code on your machine: Use the command <code>gcc -S powerR_sample.c</code> You may ssh in to the department machines: <code>ssh YOUR_BU_ID@remote.cs.binghamton.edu</code> and compile and execute the code there.
+
+a. Using the generated assembly code, draw the activation record for the <code>powerR</code> function. Field offsets should be consistent with the assembly code.
+
+b. Which way does the program stack grow?
+c. Annotate the generated assembly code to indicate which instructions manipulate and access data on the stack.
+
+*)
+
+(* <h4>Problem 2 Answer:</h4>
+
+a. Using the generated assembly code, draw the activation record for the <code>powerR</code> function. Field offsets should be consistent with the assembly code.
+_____________
+| rbp(initial)| base pointer high
+|_____________|
+| rsp(initial)| base pointer low
+|_____________|__parameters/local vars
+|     pow     |
+|_____________|
+|     base    |
+|_____________|_____________pointers to high/low base pointers above for recursion
+|*rbp(initial)|
+|_____________|
+|*rsp(initial)|
+|_____________|
+|     rbp     | base pointer high
+|_____________|
+|     rsp     | base pointer low
+|_____________|__parameters/local vars
+|     pow     |
+|_____________|
+|     base    |
+|_____________|_____________pointers to initial high/low base pointers above for recursion
+|*rbp(initial)|
+|_____________|
+|*rsp(initial)|
+|_____________|
+... continue for each instance/level of recursion
+
+b. Which way does the program stack grow?
+grows down (x86, intel-i7, gcc, debien-jessie)
+c. Annotate the generated assembly code to indicate which instructions manipulate and access data on the stack.
+
+powerR:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp               // callers base pointer pushed to stack
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp         //high/low bp setup
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp      //grow stack/make room for function on stack
+	movl	%edi, -4(%rbp) //pow into register
+	movl	%esi, -8(%rbp) //base
+	cmpl	$0, -4(%rbp)
+	jne	.L2
+	movl	$1, %eax
+	jmp	.L3
+.L2:
+	movl	-4(%rbp), %eax //setup for new function call / pre-pare next stack frame (data)
+	leal	-1(%rax), %edx //setup for new function call / pre-pare next stack frame (load address)
+	movl	-8(%rbp), %eax //setup for new function call / pre-pare next stack frame (data)
+	movl	%eax, %esi //setup for new function call / pre-pare next stack frame
+	movl	%edx, %edi //setup for new function call / pre-pare next stack frame
+	call	powerR  //recursive call
+	imull	-8(%rbp), %eax //multiply base by next function call once it finishes
+.L3:
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	powerR, .-powerR
+	.section	.rodata
+.LC0:
+	.string	"%d\n"
+	.text
+	.globl	main
+	.type	main, @function
+*)
+
+(* <h3>Problem 3:</h3>
+Recompile <a href="powerR_sample.c">powerR_sample.c</a> with optimizations: Use the command <code>gcc -S -O2 powerR_sample.c</code>. What differences do you notice between the generated assembly from question #2 above and the optimized assembly. Pay attention to how recursion is implemented. *)
+
+(* <h4>Problem 3 Answer:</h4> *)
+
+(* <h3>Problem 4:</h3>
+The following are two different algorithms to manage and allocate a list of free blocks (memory): (1) first fist: searches the list to find the first block that will fit an allocation request. (2) best fit: searches the list to find the block that results in the least amount of leftover space for an allocation request.
+
+Which strategy, if either, will result in lower external memory fragmentation? What does external fragmentation depend on? *)
+
+(* <h4>Problem 4 Answer:</h4> *)
+
+(* <h3>Problem 5:</h3>
+What is the time complexity (big-O) of the first fit algorithm mentioned in problem 4. Briefly explain an algorithm that can be used to speed up the time complexity of memory allocation. *)
+
+(* <h4>Problem 5 Answer:</h4> *)
+
+(* <h3>Problem 6:</h3>
+a. Page 121 CYU 4
+b. Page 132 CYU 12
+c. Page 164 Exercise 3.4 *)
+
+(* <h4>Problem 6 Answer:</h4> *)
+
+(* <h3>Problem 7:</h3>
+Page 165 Exercise 3.7 *)
+
+(* <h4>Problem 7 Answer:</h4> *)
+
+(* <h3>Problem 8:</h3>
+What are the two principal tradeoffs between reference counting and tracing garbage collectors? *)
+
+(* <h4>Problem 8 Answer:</h4> *)
+
+(* <h3>Problem 9:</h3>
+Consider the following pseudo code: *)
+x : integer := 4
+y : integer := 50
+
+procedure add()
+  x := x + y
+
+procedure second(P : procedure)
+  x : integer := 1
+  P()
+
+procedure first()
+  y : integer := 3
+  second(add)
+
+first()
+write integer(x)
+(* a. What does this program print if the language uses static scoping?
+b. Explain why 7 is printed out if the language uses dynamic scoping with deep binding.
+c. Explain why 4 is printed out if the language uses dynamic scoping with shallow binding. *)
+
+(* <h4>Problem 9 Answer:</h4> *)
+
+(* <h3>Problem 10:</h3>
+Page 721 Exercise 13.11: Use this <a href="perl.asn">code</a> instead of the code in the textbook. You will need to rename the file to perl.pl. *)
+
+(* <h4>Problem 10 Answer:</h4> *)
+
+(* <h3>Problem 11:</h3>
+Page 721 Exercise 13.13 *)
+
+(* <h4>Problem 11 Answer:</h4> *)
+
+(* <h3>Problem 12:</h3>
+For the following individuals write 2 or 3 sentences describing their contributions to Programming Languages/Software Development; include any non-cs facts you found interesting about each person.
+a. Adele Goldstine
+b. Grace Hopper
+c. Barbara Liskov
+d. Carol Shaw
+e. Elaine Weyuker *)
+
+(* <h4>Problem 12 Answer:</h4> *)
