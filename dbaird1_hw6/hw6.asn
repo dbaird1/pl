@@ -116,14 +116,54 @@ powerR:
 (* <h3>Problem 3:</h3>
 Recompile <a href="powerR_sample.c">powerR_sample.c</a> with optimizations: Use the command <code>gcc -S -O2 powerR_sample.c</code>. What differences do you notice between the generated assembly from question #2 above and the optimized assembly. Pay attention to how recursion is implemented. *)
 
-(* <h4>Problem 3 Answer:</h4> *)
+(* <h4>Problem 3 Answer:</h4>
+powerR:
+.LFB11:
+	.cfi_startproc
+	testl	%edi, %edi
+	movl	$1, %eax
+	je	.L4
+	.p2align 4,,10
+	.p2align 3
+.L3:
+	imull	%esi, %eax
+	subl	$1, %edi
+	jne	.L3
+	rep ret
+.L4:
+	rep ret
+	.cfi_endproc
+.LFE11:
+	.size	powerR, .-powerR
+	.section	.text.unlikely
+.LCOLDE0:
+	.text
+.LHOTE0:
+	.section	.rodata.str1.1,"aMS",@progbits,1
+.LC1:
+	.string	"%d\n"
+	.section	.text.unlikely
+.LCOLDB2:
+	.section	.text.startup,"ax",@progbits
+.LHOTB2:
+	.p2align 4,,15
+	.globl	main
+	.type	main, @function
+
+it replaced the recursion with a loop jumping to the address flagged by .L3 above
+
+*)
 
 (* <h3>Problem 4:</h3>
 The following are two different algorithms to manage and allocate a list of free blocks (memory): (1) first fist: searches the list to find the first block that will fit an allocation request. (2) best fit: searches the list to find the block that results in the least amount of leftover space for an allocation request.
 
 Which strategy, if either, will result in lower external memory fragmentation? What does external fragmentation depend on? *)
 
-(* <h4>Problem 4 Answer:</h4> *)
+(* <h4>Problem 4 Answer:</h4>
+
+Best fit will result in lower external memory fragmentation.  External memory fragmentation results from the accumulation of
+unallocated gaps in external memory which are either too small or too irregular/awkward of a size to fit newly
+allocated chunks of memory*)
 
 (* <h3>Problem 5:</h3>
 What is the time complexity (big-O) of the first fit algorithm mentioned in problem 4. Briefly explain an algorithm that can be used to speed up the time complexity of memory allocation. *)
