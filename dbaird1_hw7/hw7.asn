@@ -158,7 +158,7 @@ lists conjoined into one and assigned to seq.
 (1,2,1,2)
 tuples conjoined into one and assigned to seq.
 3. <code>seq = [1,2] + (1,2)</code>
-Runtime error, mutable vs immutable
+Type error, cant concat a tuple to a list
 
 b. Draw a memory diagrahm of the following after each statement is executed:
 1. <code>A = [(11,2),[1,2],99]</code>
@@ -171,6 +171,15 @@ b. Draw a memory diagrahm of the following after each statement is executed:
   B = [1, [(11, 2), 77, 99], 99]
 
 c.
-
+  def gen():
+      i = 1
+      while(i < 6):
+          yield([i, i+1])
+          i+=1
 d.
+  The list function returns a list of all the items in the iterator passed to it (preserves order).
+  The iter function returns an iterator for the list passed to it.
+
+f.
+  It will work for iter types, list types, and generated lists because they all implement __iter__/__next__ and are therefore "iterable" in python.
 *)
