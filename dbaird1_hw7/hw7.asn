@@ -1,0 +1,176 @@
+(* Homework Assignment 7
+   Programming Languages
+   CS471, Spring 2016
+   Binghamton University
+   Group Members: *)
+
+(* <h1>Instructions</h1> *)
+
+(* This section deals with general submission instructions.
+NEW: You are allowed to work in groups for this assignment. If you are working in a group, you MUST indicate your group members in the assignment header --- there has been a 'Group Members:' section added --- otherwise leave it blank. In additional, each group member must submit the assignment --- this is done for record keeping purposes and to ease grading. You will all receive the same grade.
+
+
+First, grab this assignment's <a href="hw7.asn">template source file</a>. To make things easier for everyone it will contain all questions with space to answer them inside the file. You must submit all answers in this file: Any external code that is required to complete a question should be included in this file as well. NOTE: You don't have to answer inside comments for this assignment. Just place an answer in the templated between questions.
+
+You must tar and gzip your submission, which should include this file along with any code required to complete the assignment. You should name the tarball with your bmail name: The following sequence of commands should be adequate to create and tar a directory of your work -- simply replace 'acanino1' with your bmail name.
+*)
+mkdir hw7
+cd hw7
+mv PATH_TO_ASN_FILE .
+tar -cvvf acanino1_hw7.tar *
+gzip acanino1_hw7.tar
+
+(* Please follow these instructions. If anything confuses you, please send me an email and I will clarify. *)
+
+(* <h1>Homework 6</h1> *)
+
+(* Due: Tuesday 3/22 at 11:59 PM *)
+
+(* <h3>Problem 1:</h3>
+Compile and run <a href="hw7.c">hw7.c</a>: <code>gcc -S hw7.c</code>. What happens when you run this code? Depending on the target machine and the compiler, this code will execute differently.  Sometimes this code goes into an infinite loop, sometimes this code terminates, sometimes this code cause a segmentation error.  Can you explain why this code does not behavior consistently?  Think in terms of the AR and the runtime stack. *)
+
+(* <h4>Problem 1 Answer:</h4> *)
+
+(* <h3>Problem 2:</h3>
+The C programming language distinguishes between a <i>declaration</i> and <i>definition</i>.
+1. What is the difference between a declaration and definition?
+2. Which of the following are declarations and which are definitions?
+  a. char * a ;
+  b. struct * S ;
+  c. struct S1 { int x;}
+  d. typedef  int * string;
+  e. int foo(int i);
+  f. static double x[10];
+  g. void function() { } *)
+
+(* <h4>Problem 2 Answer:</h4> *)
+
+(* <h3>Problem 3:</h3>
+Page 169 Exercise 3.5 *)
+
+(* <h4>Problem 3 Answer:</h4> *)
+
+(* <h3>Problem 4:</h3>
+Page 279 Exercise 6.1 *)
+
+(* <h4>Problem 4 Answer:</h4> *)
+
+(* <h3>Problem 5:</h3>
+Page 280 Exercise 6.5 *)
+
+(* <h4>Problem 5 Answer:</h4> *)
+
+(* <h3>Problem 6:</h3>
+Page 280 Exercise 6.7 *)
+
+(* <h4>Problem 6 Answer:</h4> *)
+
+(* <h3>Problem 7:</h3>
+Why is &(&z) not legal in C? *)
+
+(* <h4>Problem 7 Answer:</h4> *)
+
+(* <h3>Problem 8:</h3>
+Evaluate the following program fragement in C: *)
+int a = 0;
+int b = (a++ || ++a) >= (a++ && ++a);
+printf( "%d %d", a, b );
+(* Show each evaluation step and include the value of a and b.  Finally, display the output. Remember, in Java, C and C++,
+&& is a short circuit operator which is always evaluated left to right. The '++' and '--' operators have higher
+ precedence than '+' . The '+', additive operator, has higher precedence than '&&'.  The '=' operator has lowest precedence.
+  Assume all side effects occur immediately.
+
+Assume that whenever there is an option, operands are evaluated from left to right.
+
+For example: The first two steps look like
+int b = (a++ || ++a) >= (a++ && ++a)      a=0   b=?
+int b = (0 || ++a) >= (a++ && ++a)        a=1   b=? *)
+
+(* <h4>Problem 8 Answer:</h4>
+int b = (a++ || ++a) >= (a++ && ++a)      a=0   b=?
+int b = (0 || ++a) >= (a++ && ++a)        a=1   b=?
+int b = (0 || 2) >= (a++ && ++a)        a=2   b=?
+int b = (0 || 2) >= (a++ && ++a)        a=2   b=?
+int b = (0 || 2) >= (2 && ++a)        a=3   b=?
+int b = (0 || 2) >= (2 && ++a)        a=3   b=?
+int b = (0 || 2) >= (2 && 4)        a=4   b=?
+int b = 1 >= (2 && 4)        a=4   b=?
+int b = 1 >= 1        a=4   b=?
+int b = 1        a=4   b=1
+*)
+
+(* <h3>Problem 9:</h3>
+Problem 8, excpet that whenever there is an option, operands are evluated from right to left. Here is the problem repeated in full.
+
+Evaluate the following program fragement in C: *)
+int a = 0;
+int b = (a++ || ++a) >= (a++ && ++a);
+printf( "%d %d", a, b );
+(* Show each evaluation step and include the value of a and b.  Finally, display the output. Remember, in Java, C and C++, && is a short circuit operator which is always evaluated left to right. The '++' and '--' operators have higher precedence than '+' . The '+', additive operator, has higher precedence than '&&'.  The '=' operator has lowest precedence. Assume all side effects occur immediately.
+
+Assume that whenever there is an option, operands are evaluated from right to left.
+
+For example: The first two steps look like
+int b = (a++ || ++a) >= (a++ && ++a)      a=0   b=?
+int b = (a++ || ++a) >= (0 && ++a)        a=1   b=? *)
+
+(* <h4>Problem 9 Answer:</h4>
+int b = (a++ || ++a) >= (a++ && ++a)      a=0   b=?
+int b = (a++ || ++a) >= (0 && ++a)        a=1   b=?
+int b = (a++ || ++a) >= (0 && 2)        a=2   b=?
+int b = (2 || ++a) >= (0 && 2)        a=3   b=?
+int b = (2 || 4) >= (0 && 2)        a=4   b=?
+int b = (2 || 4) >= 1        a=4   b=?
+int b = 1 >= 1        a=4   b=?
+int b = 1        a=4   b=1
+
+*)
+
+(* <h3>Problem 10:</h3>
+Python 3 has two built-in sequence types: <i>tuple</i>, immutable sequence and <i>list</i>, mutable sequence. The language provides <i>for</i> loop to iterate through items in any sequence.
+
+The following snippet prints out each item in <code>lst</code> with its sequence number. *)
+i = 0
+for item in lst :
+    i = i+1
+    print (repr(i) + " " + repr(item))
+(* a. Briefly explain the results of the following statements:
+1. <code>seq = [1,2] + [1,2]</code>
+2. <code>seq = (1,2) +(1,2)</code>
+3. <code>seq = [1,2] + (1,2)</code>
+
+b. Draw a memory diagrahm of the following after each statement is executed:
+1. <code>A = [(11,2),[1,2],99]</code>
+2. <code>B = [1, A, 99]</code>
+3. <code>A[1] = 77</code>
+
+c. Write a python <a href="https://wiki.python.org/moin/Generators">generator</a> called 'gen' that generates the following sequence:<code>[1,2], [3,4], [5,6]</code>.
+
+d. What is the purpose of the functions <i>list</i> and <i>iter</i>?
+
+e. Will the script (above 'a') work if <code>lst</code> is a list?  Will this script work if <code>lst</code> is a tuple?  Will this script work if <code>lst</code> is created by a generator? If it work for more than one type without modification briefly explain why.  If it doesn't work can you modify the code so it work for  all three types -- What problems do you encounter? *)
+
+(* <h4>Problem 10 Answer:</h4>
+1. <code>seq = [1,2] + [1,2]</code>
+[1,2,1,2]
+lists conjoined into one and assigned to seq.
+2. <code>seq = (1,2) +(1,2)</code>
+(1,2,1,2)
+tuples conjoined into one and assigned to seq.
+3. <code>seq = [1,2] + (1,2)</code>
+Runtime error, mutable vs immutable
+
+b. Draw a memory diagrahm of the following after each statement is executed:
+1. <code>A = [(11,2),[1,2],99]</code>
+  A = [(11,2),[1,2],99]
+2. <code>B = [1, A, 99]</code>
+  A = [(11,2),[1,2],99]
+  B = [1,[(11,2),[1,2],99],99]
+3. <code>A[1] = 77</code>
+  A = [(11, 2), 77, 99]
+  B = [1, [(11, 2), 77, 99], 99]
+
+c.
+
+d.
+*)
