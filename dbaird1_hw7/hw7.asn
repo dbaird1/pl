@@ -29,7 +29,8 @@ gzip acanino1_hw7.tar
 (* <h3>Problem 1:</h3>
 Compile and run <a href="hw7.c">hw7.c</a>: <code>gcc -S hw7.c</code>. What happens when you run this code? Depending on the target machine and the compiler, this code will execute differently.  Sometimes this code goes into an infinite loop, sometimes this code terminates, sometimes this code cause a segmentation error.  Can you explain why this code does not behavior consistently?  Think in terms of the AR and the runtime stack. *)
 
-(* <h4>Problem 1 Answer:</h4> *)
+(* <h4>Problem 1 Answer:</h4>
+When we ran the code, it terminated. The behavior of the code is dependent on the way the activation record is created. The part of the code that can create problems is the while loop. The reason things may not work as intended is because i++ is in postfix notation, meaning the value of i is evaluated before it is incremented. If the condition for the loop is evaluated to be true, then the value of i is incremented, the code may try to write in values for the array from index 1 to 512 instead of 0 to 511, which would cause a segfault. If the activation record is structured in such a way that the memory location of i comes right after the array, then when the line x[i] = 0 happens, instead of going to the last address of the array, it could access the address where the value of i is stored and update it to 0. If this happens, when the loop goes back to check its condition, it will evaluate to true again and start over. This process will happen continually, creating an infinite loop. *)
 
 (* <h3>Problem 2:</h3>
 The C programming language distinguishes between a <i>declaration</i> and <i>definition</i>.
@@ -43,32 +44,49 @@ The C programming language distinguishes between a <i>declaration</i> and <i>def
   f. static double x[10];
   g. void function() { } *)
 
-(* <h4>Problem 2 Answer:</h4> *)
+(* <h4>Problem 2 Answer:</h4>
+
+2.1) To declare in C, the programmer is telling the compiler that some variable/function/class exists, and has a certain type associated with it. To define in C, the programmer is giving all the information needed in order to create a variable/function/class in its entirety.
+2.2 a) char * a; is a declaration
+b) struct * S; is a declaration
+c) struct S1{ int x;} is a definition
+d) typedef int* string; is a definition
+e) int foo(int i); is a declaration
+f) static double x[10]; is a definition
+g) void function(){ } is a definition
+*)
 
 (* <h3>Problem 3:</h3>
 Page 169 Exercise 3.5 *)
 
-(* <h4>Problem 3 Answer:</h4> *)
+(* <h4>Problem 3 Answer:</h4>
+The program will print 5, then 7. Because a is a static variable in a class, it is statically allocated. Since b is a delegate, and delegates are reference types that live on the heap, b is allocated on the heap. Since c is a parameter for a function and d is a locally declared variable, both will be stored on the stack. *)
 
 (* <h3>Problem 4:</h3>
 Page 279 Exercise 6.1 *)
 
-(* <h4>Problem 4 Answer:</h4> *)
+(* <h4>Problem 4 Answer:</h4>
+These statements are not contradictory. Most languages use left associative arithmetic operators because this is more intuitive from a programmer's perspective. However, as long as the compiler maintains correctness for the whole expression, it does not need evaluate each operand from left to right. *)
 
 (* <h3>Problem 5:</h3>
 Page 280 Exercise 6.5 *)
 
-(* <h4>Problem 5 Answer:</h4> *)
+(* <h4>Problem 5 Answer:</h4>
+An example of when removing parentheses leads to confusion is when we try to divide a number by a fraction. For example
+(/ 8 (/4 2)) = 4, but (/ 8 4 2) = 1.
+The issues of precedence and associativity do not arise with prefix or postfix notation so long as the programmer makes sure the order of operations is consistent with what he or she is trying to do mathematically.*)
 
 (* <h3>Problem 6:</h3>
 Page 280 Exercise 6.7 *)
 
 (* <h4>Problem 6 Answer:</h4> *)
+This is because the address of operator can only be used with variables that have an address associated with them. Because it returns a literal, we cannot use address of operator on the return value of the address of operator.
 
 (* <h3>Problem 7:</h3>
 Why is &(&z) not legal in C? *)
 
-(* <h4>Problem 7 Answer:</h4> *)
+(* <h4>Problem 7 Answer:</h4>
+This is because the address of operator can only be used with variables that have an address associated with them. Because it returns a literal, we cannot use address of operator on the return value of the address of operator.*)
 
 (* <h3>Problem 8:</h3>
 Evaluate the following program fragement in C: *)
